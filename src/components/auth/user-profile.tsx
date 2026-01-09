@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { useUser } from "@/context/user-context";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,7 +12,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { User, Pencil } from "lucide-react";
+import { Pencil } from "lucide-react";
 
 export function UserProfile() {
   const { user, updateUser, logout } = useUser();
@@ -40,8 +41,14 @@ export function UserProfile() {
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <button className="flex items-center gap-2 px-3 py-2 rounded hover:bg-white/10 transition-colors">
-          <div className="w-8 h-8 rounded bg-[#e50914] flex items-center justify-center">
-            <User className="w-5 h-5 text-white" />
+          <div className="w-8 h-8 rounded overflow-hidden flex-shrink-0">
+            <Image
+              src="/leonardo.png"
+              alt="Profile"
+              width={32}
+              height={32}
+              className="w-full h-full object-cover"
+            />
           </div>
           <div className="hidden md:block text-left">
             <p className="text-sm font-medium text-white">{user.username}</p>
