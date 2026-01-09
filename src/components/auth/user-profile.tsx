@@ -40,8 +40,8 @@ export function UserProfile() {
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <button className="flex items-center gap-2 px-3 py-2 rounded hover:bg-white/10 transition-colors">
-          <div className="w-8 h-8 rounded overflow-hidden flex-shrink-0">
+        <button className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-white/10 transition-colors">
+          <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
             <Image
               src="/leonardo.png"
               alt="Profile"

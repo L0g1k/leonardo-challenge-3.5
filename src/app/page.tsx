@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { LoginForm } from "@/components/auth/login-form";
 import { useUser } from "@/context/user-context";
+import { Footer } from "@/components/layout/footer";
 
 export default function LandingPage() {
   const { user, isLoading } = useUser();
@@ -28,7 +29,7 @@ export default function LandingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#141414] relative">
+    <div className="min-h-screen bg-[#141414] relative flex flex-col">
       {/* Background gradient */}
       <div
         className="absolute inset-0 bg-cover bg-center opacity-40"
@@ -46,7 +47,7 @@ export default function LandingPage() {
       </header>
 
       {/* Login form */}
-      <main className="relative z-10 flex items-center justify-center min-h-[calc(100vh-100px)]">
+      <main className="relative z-10 flex items-center justify-center flex-1">
         <div className="bg-black/75 px-8 md:px-16 py-12 rounded-md w-full max-w-md mx-4">
           <h2 className="text-3xl font-bold text-white mb-8">Sign In</h2>
           <LoginForm />
@@ -55,6 +56,10 @@ export default function LandingPage() {
           </p>
         </div>
       </main>
+
+      <div className="relative z-10">
+        <Footer />
+      </div>
     </div>
   );
 }

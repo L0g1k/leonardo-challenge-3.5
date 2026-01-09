@@ -5,6 +5,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useQuery } from "@apollo/client/react";
 import { AuthGuard } from "@/components/auth/auth-guard";
 import { Header } from "@/components/layout/header";
+import { Footer } from "@/components/layout/footer";
 import { HeroSection } from "@/components/hero/hero-section";
 import { AnimeGrid } from "@/components/anime/anime-grid";
 import { AnimeModal } from "@/components/anime/anime-modal";
@@ -246,6 +247,8 @@ function BrowseContent() {
           )}
         </section>
       </main>
+
+      <Footer />
 
       {/* Anime Detail Modal */}
       <AnimeModal
