@@ -44,9 +44,16 @@ export const PAGINATED_ANIME_QUERY = gql`
           english
           romaji
         }
+        description(asHtml: false)
+        bannerImage
         coverImage {
+          extraLarge
           large
           medium
+        }
+        trailer {
+          id
+          site
         }
         averageScore
         episodes

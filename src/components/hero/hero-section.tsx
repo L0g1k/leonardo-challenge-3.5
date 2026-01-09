@@ -1,21 +1,18 @@
 "use client";
 
-import { useQuery } from "@apollo/client/react";
-import { FEATURED_ANIME_QUERY } from "@/lib/anilist/queries";
-import { FeaturedAnimeResponse } from "@/lib/anilist/types";
 import { HeroVideo } from "./hero-video";
 import { HeroContent } from "./hero-content";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AnimeMedia } from "@/lib/anilist/types";
 
 interface HeroSectionProps {
+  anime: AnimeMedia | null;
+  isLoading?: boolean;
   onMoreInfo: (anime: AnimeMedia) => void;
 }
 
-export function HeroSection({ onMoreInfo }: HeroSectionProps) {
-  const { data, loading, error } = useQuery<FeaturedAnimeResponse>(FEATURED_ANIME_QUERY);
-
-  if (loading) {
+export function HeroSection({ anime, isLoading, onMoreInfo }: HeroSectionProps) {
+  if (isLoading) {
     return (
       <div className="relative h-[60vh] md:h-[85vh] bg-gray-900">
         <Skeleton className="absolute inset-0 bg-gray-800" />
@@ -29,15 +26,14 @@ export function HeroSection({ onMoreInfo }: HeroSectionProps) {
     );
   }
 
-  if (error || !data?.Media) {
+  if (!anime) {
     return (
       <div className="relative h-[60vh] md:h-[85vh] bg-gray-900 flex items-center justify-center">
-        <p className="text-gray-400">Failed to load featured anime</p>
+        <p className="text-gray-400">No featured anime available</p>
       </div>
     );
   }
 
-  const anime = data.Media;
   const title = anime.title.english || anime.title.romaji;
 
   return (

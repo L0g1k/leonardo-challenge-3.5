@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useQuery } from "@apollo/client/react";
 import { AuthGuard } from "@/components/auth/auth-guard";
@@ -22,6 +22,18 @@ import {
 
 const PER_PAGE = 50;
 
+// Select hero: highest scored anime with a YouTube trailer
+function selectHeroAnime(animeList: AnimeMedia[]): AnimeMedia | null {
+  const withTrailer = animeList.filter(
+    (a) => a.trailer?.site === "youtube" && a.trailer?.id
+  );
+  if (withTrailer.length === 0) {
+    // Fallback to highest scored overall if none have trailers
+    return animeList.sort((a, b) => (b.averageScore || 0) - (a.averageScore || 0))[0] || null;
+  }
+  return withTrailer.sort((a, b) => (b.averageScore || 0) - (a.averageScore || 0))[0];
+}
+
 function BrowseContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -39,6 +51,16 @@ function BrowseContent() {
 
   const pageInfo = data?.Page.pageInfo;
   const animeList = data?.Page.media || [];
+
+  // Select hero and filter it from the grid
+  const { heroAnime, gridAnime } = useMemo(() => {
+    if (animeList.length === 0) {
+      return { heroAnime: null, gridAnime: [] };
+    }
+    const hero = selectHeroAnime(animeList);
+    const grid = hero ? animeList.filter((a) => a.id !== hero.id) : animeList;
+    return { heroAnime: hero, gridAnime: grid };
+  }, [animeList]);
 
   const handlePageChange = (page: number) => {
     router.push(`/browse?page=${page}`);
@@ -143,12 +165,16 @@ function BrowseContent() {
       <Header />
 
       {/* Hero Section */}
-      <HeroSection onMoreInfo={handleAnimeClick} />
+      <HeroSection
+        anime={heroAnime}
+        isLoading={loading}
+        onMoreInfo={handleAnimeClick}
+      />
 
       {/* Main Content */}
-      <main className="relative z-10 -mt-24 md:-mt-32 px-4 md:px-12 pb-12">
+      <main className="relative z-10 px-4 md:px-12 pb-12 pt-8">
         <section>
-          <h2 className="text-xl md:text-2xl font-semibold text-white mb-4">
+          <h2 className="text-xl md:text-2xl font-semibold text-white mb-6">
             Popular Anime
           </h2>
 
@@ -160,7 +186,7 @@ function BrowseContent() {
           ) : (
             <>
               <AnimeGrid
-                anime={animeList}
+                anime={gridAnime}
                 onAnimeClick={handleAnimeClick}
                 isLoading={loading}
               />

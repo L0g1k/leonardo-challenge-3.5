@@ -125,6 +125,17 @@
   body {
     @apply bg-[#141414] text-white antialiased;
   }
+  /* Ensure all interactive elements have pointer cursor */
+  button,
+  [role="button"],
+  a,
+  input[type="submit"],
+  input[type="button"],
+  input[type="reset"],
+  select,
+  summary {
+    cursor: pointer;
+  }
 }
 
 /* Netflix-specific styles */
