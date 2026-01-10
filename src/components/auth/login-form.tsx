@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useUser } from "@/context/user-context";
+import { validateUsername, validateJobTitle, USERNAME_MAX_LENGTH, JOB_TITLE_MAX_LENGTH } from "@/lib/validation";
 
 export function LoginForm() {
   const [username, setUsername] = useState("");
@@ -18,14 +19,10 @@ export function LoginForm() {
     e.preventDefault();
     const newErrors: { username?: string; jobTitle?: string } = {};
 
-    if (!username.trim()) {
-      newErrors.username = "Username is required";
-    }
-    if (!jobTitle.trim()) {
-      newErrors.jobTitle = "Job title is required";
-    }
+    newErrors.username = validateUsername(username);
+    newErrors.jobTitle = validateJobTitle(jobTitle);
 
-    if (Object.keys(newErrors).length > 0) {
+    if (newErrors.username || newErrors.jobTitle) {
       setErrors(newErrors);
       return;
     }
@@ -49,6 +46,7 @@ export function LoginForm() {
             if (errors.username) setErrors((prev) => ({ ...prev, username: undefined }));
           }}
           placeholder="Enter your username"
+          maxLength={USERNAME_MAX_LENGTH}
           className="bg-[#333] border-none text-white placeholder:text-gray-400 h-12 rounded"
         />
         {errors.username && (
@@ -69,6 +67,7 @@ export function LoginForm() {
             if (errors.jobTitle) setErrors((prev) => ({ ...prev, jobTitle: undefined }));
           }}
           placeholder="Enter your job title"
+          maxLength={JOB_TITLE_MAX_LENGTH}
           className="bg-[#333] border-none text-white placeholder:text-gray-400 h-12 rounded"
         />
         {errors.jobTitle && (

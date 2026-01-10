@@ -13,20 +13,29 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Pencil } from "lucide-react";
+import { validateUsername, validateJobTitle, USERNAME_MAX_LENGTH, JOB_TITLE_MAX_LENGTH } from "@/lib/validation";
 
 export function UserProfile() {
   const { user, updateUser, logout } = useUser();
   const [isOpen, setIsOpen] = useState(false);
   const [username, setUsername] = useState(user?.username || "");
   const [jobTitle, setJobTitle] = useState(user?.jobTitle || "");
+  const [errors, setErrors] = useState<{ username?: string; jobTitle?: string }>({});
 
   if (!user) return null;
 
   const handleSave = () => {
-    if (username.trim() && jobTitle.trim()) {
-      updateUser(username.trim(), jobTitle.trim());
-      setIsOpen(false);
+    const newErrors: { username?: string; jobTitle?: string } = {};
+    newErrors.username = validateUsername(username);
+    newErrors.jobTitle = validateJobTitle(jobTitle);
+
+    if (newErrors.username || newErrors.jobTitle) {
+      setErrors(newErrors);
+      return;
     }
+
+    updateUser(username.trim(), jobTitle.trim());
+    setIsOpen(false);
   };
 
   const handleOpenChange = (open: boolean) => {
@@ -34,6 +43,7 @@ export function UserProfile() {
     if (open) {
       setUsername(user.username);
       setJobTitle(user.jobTitle);
+      setErrors({});
     }
   };
 
@@ -66,17 +76,31 @@ export function UserProfile() {
             <label className="text-sm text-gray-400">Username</label>
             <Input
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={(e) => {
+                setUsername(e.target.value);
+                if (errors.username) setErrors((prev) => ({ ...prev, username: undefined }));
+              }}
+              maxLength={USERNAME_MAX_LENGTH}
               className="bg-[#333] border-none text-white"
             />
+            {errors.username && (
+              <p className="text-sm text-orange-500">{errors.username}</p>
+            )}
           </div>
           <div className="space-y-2">
             <label className="text-sm text-gray-400">Job Title</label>
             <Input
               value={jobTitle}
-              onChange={(e) => setJobTitle(e.target.value)}
+              onChange={(e) => {
+                setJobTitle(e.target.value);
+                if (errors.jobTitle) setErrors((prev) => ({ ...prev, jobTitle: undefined }));
+              }}
+              maxLength={JOB_TITLE_MAX_LENGTH}
               className="bg-[#333] border-none text-white"
             />
+            {errors.jobTitle && (
+              <p className="text-sm text-orange-500">{errors.jobTitle}</p>
+            )}
           </div>
           <div className="flex gap-3 pt-2">
             <Button
