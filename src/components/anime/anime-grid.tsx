@@ -8,9 +8,10 @@ interface AnimeGridProps {
   anime: AnimeMedia[];
   onAnimeClick: (anime: AnimeMedia) => void;
   isLoading?: boolean;
+  loadingAnimeId?: number | null;
 }
 
-export function AnimeGrid({ anime, onAnimeClick, isLoading }: AnimeGridProps) {
+export function AnimeGrid({ anime, onAnimeClick, isLoading, loadingAnimeId }: AnimeGridProps) {
   if (isLoading) {
     return (
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 md:gap-4">
@@ -36,6 +37,7 @@ export function AnimeGrid({ anime, onAnimeClick, isLoading }: AnimeGridProps) {
           key={item.id}
           anime={item}
           onClick={() => onAnimeClick(item)}
+          isLoading={loadingAnimeId === item.id}
         />
       ))}
     </div>

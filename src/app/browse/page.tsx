@@ -2,15 +2,15 @@
 
 import { useState, useMemo } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { useQuery } from "@apollo/client/react";
+import { useLazyQuery, useQuery } from "@apollo/client/react";
 import { AuthGuard } from "@/components/auth/auth-guard";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { HeroSection } from "@/components/hero/hero-section";
 import { AnimeGrid } from "@/components/anime/anime-grid";
 import { AnimeModal } from "@/components/anime/anime-modal";
-import { PAGINATED_ANIME_QUERY } from "@/lib/anilist/queries";
-import { PaginatedAnimeResponse, AnimeMedia } from "@/lib/anilist/types";
+import { PAGINATED_ANIME_QUERY, ANIME_DETAIL_QUERY } from "@/lib/anilist/queries";
+import { PaginatedAnimeResponse, AnimeDetailResponse, AnimeMedia } from "@/lib/anilist/types";
 import {
   Pagination,
   PaginationContent,
@@ -40,8 +40,11 @@ function BrowseContent() {
   const router = useRouter();
   const [selectedAnime, setSelectedAnime] = useState<AnimeMedia | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loadingAnimeId, setLoadingAnimeId] = useState<number | null>(null);
 
   const currentPage = Number(searchParams.get("page")) || 1;
+
+  const [fetchAnimeDetails] = useLazyQuery<AnimeDetailResponse>(ANIME_DETAIL_QUERY);
 
   const { data, loading, error } = useQuery<PaginatedAnimeResponse>(
     PAGINATED_ANIME_QUERY,
@@ -68,9 +71,17 @@ function BrowseContent() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleAnimeClick = (anime: AnimeMedia) => {
-    setSelectedAnime(anime);
-    setIsModalOpen(true);
+  const handleAnimeClick = async (anime: AnimeMedia) => {
+    setLoadingAnimeId(anime.id);
+    try {
+      const { data } = await fetchAnimeDetails({ variables: { id: anime.id } });
+      if (data?.Media) {
+        setSelectedAnime(data.Media);
+        setIsModalOpen(true);
+      }
+    } finally {
+      setLoadingAnimeId(null);
+    }
   };
 
   const handleCloseModal = () => {
@@ -190,6 +201,7 @@ function BrowseContent() {
                 anime={gridAnime}
                 onAnimeClick={handleAnimeClick}
                 isLoading={loading}
+                loadingAnimeId={loadingAnimeId}
               />
 
               {/* Pagination */}
