@@ -19,15 +19,16 @@ export function AnimeCard({ anime, onClick, className, isLoading }: AnimeCardPro
     <button
       onClick={onClick}
       disabled={isLoading}
+      aria-label={`${title}${anime.averageScore ? `, rated ${anime.averageScore}%` : ""}${anime.episodes ? `, ${anime.episodes} episodes` : ""}${anime.genres?.length ? `, genres: ${anime.genres.slice(0, 2).join(", ")}` : ""}`}
       className={cn(
-        "group relative aspect-[2/3] rounded-md overflow-hidden bg-gray-800 transition-transform duration-300 hover:scale-105 hover:z-10 focus:outline-none focus:ring-2 focus:ring-[#e50914]",
+        "group relative aspect-[2/3] rounded-md overflow-hidden bg-gray-800 transition-all duration-300 hover:scale-105 hover:z-10 hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-[#e50914]",
         isLoading && "pointer-events-none",
         className
       )}
     >
       <Image
         src={imageUrl}
-        alt={title}
+        alt=""
         fill
         sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
         className="object-cover"
@@ -35,31 +36,10 @@ export function AnimeCard({ anime, onClick, className, isLoading }: AnimeCardPro
 
       {/* Loading overlay */}
       {isLoading && (
-        <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-20">
+        <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-20" aria-hidden="true">
           <div className="w-8 h-8 border-3 border-white border-t-transparent rounded-full animate-spin" />
         </div>
       )}
-
-      {/* Hover overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-      {/* Info on hover */}
-      <div className="absolute bottom-0 left-0 right-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-        <h3 className="text-white text-sm font-semibold line-clamp-2 mb-1">
-          {title}
-        </h3>
-        <div className="flex items-center gap-2 text-xs text-gray-300">
-          {anime.averageScore && (
-            <span className="text-green-400">{anime.averageScore}%</span>
-          )}
-          {anime.episodes && <span>{anime.episodes} eps</span>}
-        </div>
-        {anime.genres && anime.genres.length > 0 && (
-          <p className="text-xs text-gray-400 mt-1 line-clamp-1">
-            {anime.genres.slice(0, 3).join(" • ")}
-          </p>
-        )}
-      </div>
 
       {/* Score badge */}
       {anime.averageScore && !isLoading && (
@@ -67,6 +47,22 @@ export function AnimeCard({ anime, onClick, className, isLoading }: AnimeCardPro
           {anime.averageScore}%
         </div>
       )}
+
+      {/* Subtle gradient at bottom */}
+      <div className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black/85 to-transparent" />
+
+      {/* Info */}
+      <div className="absolute bottom-0 left-0 right-0 p-3">
+        <h3 className="text-white text-sm font-semibold line-clamp-2 mb-1">
+          {title}
+        </h3>
+        <div className="flex items-center flex-wrap gap-x-2 gap-y-0.5 text-xs text-gray-300">
+          {anime.genres && anime.genres.length > 0 && (
+            <span className="line-clamp-1">{anime.genres.slice(0, 2).join(" • ")}</span>
+          )}
+          {anime.episodes && <span>• {anime.episodes} eps</span>}
+        </div>
+      </div>
     </button>
   );
 }
