@@ -114,7 +114,7 @@ export function UserProfile() {
           <div className="flex gap-3 pt-2">
             <Button
               onClick={handleSave}
-              className="flex-1 bg-[#e50914] hover:bg-[#f40612]"
+              className="flex-1 bg-[#e50914] hover:bg-[#f40612] text-white"
             >
               Save Changes
             </Button>

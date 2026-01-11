@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useScrollPosition } from "@/hooks/use-scroll-position";
 import { UserProfile } from "@/components/auth/user-profile";
 import { cn } from "@/lib/utils";
@@ -19,9 +20,14 @@ export function Header() {
       <div className="flex items-center justify-between h-16 md:h-20">
         <div className="flex items-center gap-8">
           <Link href="/browse">
-            <h1 className="text-[#e50914] text-2xl md:text-3xl font-bold tracking-tight">
-              ANIFLIX
-            </h1>
+            <Image
+              src="/aniflix.png"
+              alt="Aniflix"
+              width={120}
+              height={33}
+              className="h-6 md:h-8 w-auto"
+              priority
+            />
           </Link>
         </div>
 

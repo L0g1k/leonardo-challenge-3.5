@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { LoginForm } from "@/components/auth/login-form";
 import { useUser } from "@/context/user-context";
 import { Footer } from "@/components/layout/footer";
@@ -41,9 +42,14 @@ export default function LandingPage() {
 
       {/* Header */}
       <header className="relative z-10 px-6 md:px-12 py-6">
-        <h1 className="text-[#e50914] text-3xl md:text-4xl font-bold tracking-tight">
-          ANIFLIX
-        </h1>
+        <Image
+          src="/aniflix.png"
+          alt="Aniflix"
+          width={120}
+          height={33}
+          className="h-8 md:h-10 w-auto"
+          priority
+        />
       </header>
 
       {/* Login form */}
