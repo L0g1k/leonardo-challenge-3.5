@@ -50,7 +50,10 @@ export function UserProfile() {
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <button className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-white/10 transition-colors">
+        <button
+          aria-label="Edit profile"
+          className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-white/10 transition-colors"
+        >
           <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
             <Image
               src="/leonardo.png"
@@ -73,33 +76,39 @@ export function UserProfile() {
         </DialogHeader>
         <div className="space-y-4 pt-4">
           <div className="space-y-2">
-            <label className="text-sm text-gray-400">Username</label>
+            <label htmlFor="profile-username" className="text-sm text-gray-400">Username</label>
             <Input
+              id="profile-username"
               value={username}
               onChange={(e) => {
                 setUsername(e.target.value);
                 if (errors.username) setErrors((prev) => ({ ...prev, username: undefined }));
               }}
               maxLength={USERNAME_MAX_LENGTH}
+              aria-invalid={!!errors.username}
+              aria-describedby={errors.username ? "profile-username-error" : undefined}
               className="bg-[#333] border-none text-white"
             />
             {errors.username && (
-              <p className="text-sm text-orange-500">{errors.username}</p>
+              <p id="profile-username-error" role="alert" className="text-sm text-orange-500">{errors.username}</p>
             )}
           </div>
           <div className="space-y-2">
-            <label className="text-sm text-gray-400">Job Title</label>
+            <label htmlFor="profile-jobtitle" className="text-sm text-gray-400">Job Title</label>
             <Input
+              id="profile-jobtitle"
               value={jobTitle}
               onChange={(e) => {
                 setJobTitle(e.target.value);
                 if (errors.jobTitle) setErrors((prev) => ({ ...prev, jobTitle: undefined }));
               }}
               maxLength={JOB_TITLE_MAX_LENGTH}
+              aria-invalid={!!errors.jobTitle}
+              aria-describedby={errors.jobTitle ? "profile-jobtitle-error" : undefined}
               className="bg-[#333] border-none text-white"
             />
             {errors.jobTitle && (
-              <p className="text-sm text-orange-500">{errors.jobTitle}</p>
+              <p id="profile-jobtitle-error" role="alert" className="text-sm text-orange-500">{errors.jobTitle}</p>
             )}
           </div>
           <div className="flex gap-3 pt-2">

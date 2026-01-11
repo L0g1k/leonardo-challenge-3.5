@@ -47,10 +47,12 @@ export function LoginForm() {
           }}
           placeholder="Enter your username"
           maxLength={USERNAME_MAX_LENGTH}
+          aria-invalid={!!errors.username}
+          aria-describedby={errors.username ? "username-error" : undefined}
           className="bg-[#333] border-none text-white placeholder:text-gray-400 h-12 rounded"
         />
         {errors.username && (
-          <p className="text-sm text-orange-500">{errors.username}</p>
+          <p id="username-error" role="alert" className="text-sm text-orange-500">{errors.username}</p>
         )}
       </div>
 
@@ -68,10 +70,12 @@ export function LoginForm() {
           }}
           placeholder="Enter your job title"
           maxLength={JOB_TITLE_MAX_LENGTH}
+          aria-invalid={!!errors.jobTitle}
+          aria-describedby={errors.jobTitle ? "jobtitle-error" : undefined}
           className="bg-[#333] border-none text-white placeholder:text-gray-400 h-12 rounded"
         />
         {errors.jobTitle && (
-          <p className="text-sm text-orange-500">{errors.jobTitle}</p>
+          <p id="jobtitle-error" role="alert" className="text-sm text-orange-500">{errors.jobTitle}</p>
         )}
       </div>
 

@@ -16,8 +16,9 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#141414] flex items-center justify-center">
-        <div className="w-12 h-12 border-4 border-[#e50914] border-t-transparent rounded-full animate-spin" />
+      <div className="min-h-screen bg-[#141414] flex items-center justify-center" role="status" aria-live="polite">
+        <div className="w-12 h-12 border-4 border-[#e50914] border-t-transparent rounded-full animate-spin" aria-hidden="true" />
+        <span className="sr-only">Loading...</span>
       </div>
     );
   }

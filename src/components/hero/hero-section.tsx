@@ -14,14 +14,15 @@ interface HeroSectionProps {
 export function HeroSection({ anime, isLoading, onMoreInfo }: HeroSectionProps) {
   if (isLoading) {
     return (
-      <div className="relative h-[60vh] md:h-[85vh] bg-gray-900">
-        <Skeleton className="absolute inset-0 bg-gray-800" />
-        <div className="absolute bottom-0 left-0 p-4 md:p-12 pb-24 space-y-4">
+      <div className="relative h-[60vh] md:h-[85vh] bg-gray-900" role="status" aria-busy="true" aria-label="Loading featured anime">
+        <Skeleton className="absolute inset-0 bg-gray-800" aria-hidden="true" />
+        <div className="absolute bottom-0 left-0 p-4 md:p-12 pb-24 space-y-4" aria-hidden="true">
           <Skeleton className="h-12 w-64 bg-gray-700" />
           <Skeleton className="h-4 w-96 bg-gray-700" />
           <Skeleton className="h-4 w-80 bg-gray-700" />
           <Skeleton className="h-10 w-32 bg-gray-700" />
         </div>
+        <span className="sr-only">Loading featured anime...</span>
       </div>
     );
   }
