@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useLazyQuery, useQuery } from "@apollo/client/react";
 import { AuthGuard } from "@/components/auth/auth-guard";
@@ -40,12 +40,34 @@ function BrowseContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [selectedAnime, setSelectedAnime] = useState<AnimeMedia | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [loadingAnimeId, setLoadingAnimeId] = useState<number | null>(null);
 
   const currentPage = Number(searchParams.get("page")) || 1;
+  const animeIdParam = searchParams.get("anime");
+  const isModalOpen = !!animeIdParam && !!selectedAnime;
 
   const [fetchAnimeDetails] = useLazyQuery<AnimeDetailResponse>(ANIME_DETAIL_QUERY);
+
+  // Fetch anime details when anime ID is in URL
+  useEffect(() => {
+    if (animeIdParam && !selectedAnime) {
+      const animeId = Number(animeIdParam);
+      if (!isNaN(animeId)) {
+        setLoadingAnimeId(animeId);
+        fetchAnimeDetails({ variables: { id: animeId } })
+          .then(({ data }) => {
+            if (data?.Media) {
+              setSelectedAnime(data.Media);
+            }
+          })
+          .finally(() => {
+            setLoadingAnimeId(null);
+          });
+      }
+    } else if (!animeIdParam && selectedAnime) {
+      setSelectedAnime(null);
+    }
+  }, [animeIdParam, selectedAnime, fetchAnimeDetails]);
 
   const { data, loading, error } = useQuery<PaginatedAnimeResponse>(
     PAGINATED_ANIME_QUERY,
@@ -72,23 +94,29 @@ function BrowseContent() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleAnimeClick = async (anime: AnimeMedia) => {
+  const handleAnimeClick = useCallback(async (anime: AnimeMedia) => {
     setLoadingAnimeId(anime.id);
     try {
       const { data } = await fetchAnimeDetails({ variables: { id: anime.id } });
       if (data?.Media) {
         setSelectedAnime(data.Media);
-        setIsModalOpen(true);
+        // Update URL with anime ID
+        const params = new URLSearchParams(searchParams.toString());
+        params.set("anime", String(anime.id));
+        router.push(`/browse?${params.toString()}`, { scroll: false });
       }
     } finally {
       setLoadingAnimeId(null);
     }
-  };
+  }, [fetchAnimeDetails, router, searchParams]);
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedAnime(null);
-  };
+  const handleCloseModal = useCallback(() => {
+    // Remove anime ID from URL
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("anime");
+    const queryString = params.toString();
+    router.push(`/browse${queryString ? `?${queryString}` : ""}`, { scroll: false });
+  }, [router, searchParams]);
 
   const renderPaginationItems = () => {
     if (!pageInfo) return null;
