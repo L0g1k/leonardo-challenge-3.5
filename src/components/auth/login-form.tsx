@@ -40,6 +40,7 @@ export function LoginForm() {
         <Input
           id="username"
           type="text"
+          autoFocus
           value={username}
           onChange={(e) => {
             setUsername(e.target.value);
