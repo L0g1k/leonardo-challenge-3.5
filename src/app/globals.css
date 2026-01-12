@@ -156,16 +156,20 @@
   background: linear-gradient(
     to top,
     rgb(20 20 20) 0%,
-    rgb(20 20 20 / 0.8) 15%,
-    transparent 40%
+    rgb(20 20 20 / 0.7) 10%,
+    rgb(20 20 20 / 0.4) 25%,
+    rgb(20 20 20 / 0.1) 50%,
+    transparent 70%
   );
 }
 
 .hero-gradient-left {
   background: linear-gradient(
     to right,
-    rgb(20 20 20 / 0.9) 0%,
-    transparent 50%
+    rgb(20 20 20 / 0.7) 0%,
+    rgb(20 20 20 / 0.4) 15%,
+    rgb(20 20 20 / 0.1) 35%,
+    transparent 60%
   );
 }
 

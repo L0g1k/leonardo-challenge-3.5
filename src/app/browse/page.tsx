@@ -36,6 +36,12 @@ function selectHeroAnime(animeList: AnimeMedia[]): AnimeMedia | null {
 }
 
 // 'Information' page (named 'Browse') because this is a Netflix clone
+
+/* For better UX we fetch the data when the title is clicked, then display the modal
+ * afterwards. This prevents a 'flash' of unfinished content.
+
+ * We also hook the loaded modal up to the router, so the back button closes the modal.
+ */
 function BrowseContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
