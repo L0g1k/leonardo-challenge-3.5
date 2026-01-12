@@ -35,6 +35,7 @@ function selectHeroAnime(animeList: AnimeMedia[]): AnimeMedia | null {
   return withTrailer.sort((a, b) => (b.averageScore || 0) - (a.averageScore || 0))[0];
 }
 
+// 'Information' page (named 'Browse') because this is a Netflix clone
 function BrowseContent() {
   const searchParams = useSearchParams();
   const router = useRouter();

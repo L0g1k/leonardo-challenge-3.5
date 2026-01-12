@@ -25,6 +25,9 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 
 const STORAGE_KEY = "netflix-clone-user";
 
+/**
+ * Saves 'User' (username and job title) to localStorage
+ */
 export function UserProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);

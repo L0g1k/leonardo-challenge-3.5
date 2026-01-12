@@ -1,6 +1,9 @@
 export const USERNAME_MAX_LENGTH = 50;
 export const JOB_TITLE_MAX_LENGTH = 50;
 
+// Spec didn't mention specific validation but since 'production ready' was mentioned I am assuming we expect
+// at least some basic validation
+
 export function validateUsername(value: string): string | undefined {
   const trimmed = value.trim();
   if (!trimmed) return "Username is required";
