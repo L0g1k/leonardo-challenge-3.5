@@ -50,9 +50,10 @@ function BrowseContent() {
 
   // Fetch anime details when anime ID is in URL
   useEffect(() => {
-    if (animeIdParam && !selectedAnime) {
+    if (animeIdParam) {
       const animeId = Number(animeIdParam);
-      if (!isNaN(animeId)) {
+      // Only fetch if we don't already have this anime loaded
+      if (!isNaN(animeId) && selectedAnime?.id !== animeId) {
         setLoadingAnimeId(animeId);
         fetchAnimeDetails({ variables: { id: animeId } })
           .then(({ data }) => {
@@ -64,10 +65,11 @@ function BrowseContent() {
             setLoadingAnimeId(null);
           });
       }
-    } else if (!animeIdParam && selectedAnime) {
+    } else if (selectedAnime) {
       setSelectedAnime(null);
     }
-  }, [animeIdParam, selectedAnime, fetchAnimeDetails]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [animeIdParam, fetchAnimeDetails]);
 
   const { data, loading, error } = useQuery<PaginatedAnimeResponse>(
     PAGINATED_ANIME_QUERY,
@@ -94,21 +96,14 @@ function BrowseContent() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleAnimeClick = useCallback(async (anime: AnimeMedia) => {
+  const handleAnimeClick = useCallback((anime: AnimeMedia) => {
+    // Show loading immediately for responsive feedback
     setLoadingAnimeId(anime.id);
-    try {
-      const { data } = await fetchAnimeDetails({ variables: { id: anime.id } });
-      if (data?.Media) {
-        setSelectedAnime(data.Media);
-        // Update URL with anime ID
-        const params = new URLSearchParams(searchParams.toString());
-        params.set("anime", String(anime.id));
-        router.push(`/browse?${params.toString()}`, { scroll: false });
-      }
-    } finally {
-      setLoadingAnimeId(null);
-    }
-  }, [fetchAnimeDetails, router, searchParams]);
+    // Update URL - the useEffect will handle fetching
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("anime", String(anime.id));
+    router.push(`/browse?${params.toString()}`, { scroll: false });
+  }, [router, searchParams]);
 
   const handleCloseModal = useCallback(() => {
     // Remove anime ID from URL

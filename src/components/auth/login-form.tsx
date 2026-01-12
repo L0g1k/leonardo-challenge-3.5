@@ -8,7 +8,11 @@ import { Label } from "@/components/ui/label";
 import { useUser } from "@/context/user-context";
 import { validateUsername, validateJobTitle, USERNAME_MAX_LENGTH, JOB_TITLE_MAX_LENGTH } from "@/lib/validation";
 
-export function LoginForm() {
+interface LoginFormProps {
+  autoFocus?: boolean;
+}
+
+export function LoginForm({ autoFocus = false }: LoginFormProps) {
   const [username, setUsername] = useState("");
   const [jobTitle, setJobTitle] = useState("");
   const [errors, setErrors] = useState<{ username?: string; jobTitle?: string }>({});
@@ -40,7 +44,7 @@ export function LoginForm() {
         <Input
           id="username"
           type="text"
-          autoFocus
+          autoFocus={autoFocus}
           value={username}
           onChange={(e) => {
             setUsername(e.target.value);
