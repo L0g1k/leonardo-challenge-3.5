@@ -39,7 +39,7 @@ export function AnimeModal({ anime, isOpen, onClose }: AnimeModalProps) {
         <div className="relative aspect-video w-full bg-gray-900">
           {hasTrailer ? (
             <iframe
-              src={`https://www.youtube.com/embed/${anime.trailer?.id}?autoplay=0&controls=1&modestbranding=1&rel=0`}
+              src={`https://www.youtube.com/embed/${anime.trailer?.id}?autoplay=1&mute=1&controls=1&modestbranding=1&rel=0`}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
               className="absolute inset-0 w-full h-full"
