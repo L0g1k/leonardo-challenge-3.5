@@ -32,7 +32,7 @@ export function AnimeModal({ anime, isOpen, onClose }: AnimeModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0 bg-[#181818] border-none text-white">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0 bg-[#181818] border-none text-white sm:rounded-lg rounded-none fixed sm:top-[50%] top-0 sm:translate-y-[-50%] translate-y-0 sm:h-auto h-full sm:max-h-[90vh] max-h-full">
         <DialogTitle className="sr-only">{title}</DialogTitle>
 
         {/* Hero/Banner section */}
