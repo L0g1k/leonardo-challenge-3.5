@@ -214,7 +214,7 @@ function BrowseContent() {
       />
 
       {/* Main Content */}
-      <main className="relative z-10 px-4 md:px-12 pb-12 pt-8">
+      <main id="main-content" className="relative z-10 px-4 md:px-12 pb-12 pt-8">
         <section>
           <h2 className="text-xl md:text-2xl font-semibold text-white mb-6">
             Popular Anime
@@ -248,6 +248,7 @@ function BrowseContent() {
                               handlePageChange(currentPage - 1);
                             }
                           }}
+                          aria-disabled={currentPage === 1}
                           className={
                             currentPage === 1
                               ? "pointer-events-none opacity-50"
@@ -267,6 +268,7 @@ function BrowseContent() {
                               handlePageChange(currentPage + 1);
                             }
                           }}
+                          aria-disabled={currentPage === pageInfo.lastPage}
                           className={
                             currentPage === pageInfo.lastPage
                               ? "pointer-events-none opacity-50"

@@ -19,8 +19,9 @@ export default function LandingPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#141414] flex items-center justify-center">
-        <div className="w-12 h-12 border-4 border-[#e50914] border-t-transparent rounded-full animate-spin" />
+      <div className="min-h-screen bg-[#141414] flex items-center justify-center" role="status" aria-label="Loading">
+        <div className="w-12 h-12 border-4 border-[#e50914] border-t-transparent rounded-full animate-spin" aria-hidden="true" />
+        <span className="sr-only">Loading...</span>
       </div>
     );
   }
@@ -53,7 +54,7 @@ export default function LandingPage() {
       </header>
 
       {/* Login form */}
-      <main className="relative z-10 flex items-center justify-center flex-1">
+      <main id="main-content" className="relative z-10 flex items-center justify-center flex-1">
         <div className="bg-black/75 px-8 md:px-16 py-12 rounded-md w-full max-w-md mx-4">
           <h2 className="text-3xl font-bold text-white mb-8">Sign In</h2>
           <LoginForm />

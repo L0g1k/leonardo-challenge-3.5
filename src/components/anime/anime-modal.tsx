@@ -43,6 +43,7 @@ export function AnimeModal({ anime, isOpen, onClose }: AnimeModalProps) {
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
               className="absolute inset-0 w-full h-full"
+              title={`${title} trailer`}
             />
           ) : anime.bannerImage ? (
             <>
@@ -69,9 +70,10 @@ export function AnimeModal({ anime, isOpen, onClose }: AnimeModalProps) {
           {/* Close button */}
           <button
             onClick={onClose}
+            aria-label="Close dialog"
             className="absolute top-4 right-4 w-10 h-10 rounded-full bg-[#181818] flex items-center justify-center hover:bg-[#282828] transition-colors z-10"
           >
-            <X className="w-5 h-5" />
+            <X className="w-5 h-5" aria-hidden="true" />
           </button>
 
           {/* Title overlay */}
